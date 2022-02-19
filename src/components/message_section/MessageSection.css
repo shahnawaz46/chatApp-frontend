@@ -1,0 +1,165 @@
+.messagesection-go-back-arrow{
+    display: none;
+}
+
+.message-section-div{
+    background-color: rgb(241, 246, 251);
+    flex: 1;
+    padding: 25px 25px 0px 25px; 
+    box-sizing: border-box;
+    height: 100%;
+}
+
+.messagesection-user{
+    background-color: white;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    box-shadow: 0 3px 15px rgb(0 0 0 / 4%);
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.messagesection-user-name{
+    flex: 0.90;
+    margin-left: 15px
+}
+
+.messagesection-user-name > h4{
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.messagesection-icon-div{
+    flex: 0.10;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.icon{
+    cursor: pointer;
+    font-size: 22px;
+    margin-right: 10px;
+}
+
+.messagesection-chat::-webkit-scrollbar{
+    display: none;
+}
+
+.messagesection-chat{
+    /* border: 1px solid black; */
+    width: 100%;
+    /* height: 410px; */
+    height: calc(100vh - 245px);
+    display: flex;
+    flex-direction: column;
+    margin: 5px 0px;
+    box-sizing: border-box;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.messagesection-send-message{
+    background-color: rgb(226,222,222);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    margin-bottom: 5px;
+    box-shadow: 0 3px 15px rgb(0 0 0 / 4%);
+    box-sizing: border-box;
+    border-radius: 5px;
+    position: sticky;
+    bottom: 0px;
+}
+
+.messagesection-send-message > input{
+    width: 100%;
+    margin: 0px 10px;
+    padding: 8px 10px;
+    font-size: 15px;
+    border: none;
+    border-radius: 8px;
+    outline: none;
+}
+
+
+
+/* show user profile */
+.showprofile-main-div{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    background: #262626;
+    z-index: 5;
+}
+
+.showprofile-div{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    height: 70%;
+    width: 350px;
+    transition: all 0.5s;
+}
+
+
+
+
+
+/* media query */
+
+@media only screen and (max-width:768px) {
+    .messagesection-go-back-arrow{
+        display: block;
+        margin-right: 10px;
+    }
+
+    .message-section-div{
+        background-color: rgb(241, 246, 251);
+        flex: 1;
+        padding: 10px 10px 0px 10px; 
+        box-sizing: border-box;
+    }
+
+    .messagesection-user {
+        padding: 12px
+    }
+
+    .messagesection-chat{
+        height: calc(100vh - 215px);
+    }
+
+    .messagesection-send-message{
+        padding: 15px 10px;
+    }
+}
+
+
+@media only screen and (max-width:360px) {
+    .showprofile-div{
+        width: 100%;
+    }
+}
+
+@media only screen and (max-width:340px) {
+    .messagesection-user-name > h4{
+        font-size: 15px;
+    }
+
+    .messagesection-user-name > p{
+        font-size: 15px;
+    }
+
+    .messagesection-user {
+        padding: 12px 0px 12px 12px
+    }
+
+    .icon{
+        font-size: 19px;
+        margin-right: 8px;
+      } 
+}

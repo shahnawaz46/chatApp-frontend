@@ -1,0 +1,56 @@
+.otpverification-main-div{
+    /* border: 1px solid black; */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    text-align: center;
+    width: 100%;
+    padding: 10px;
+}
+
+.otpverification-content-image{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.otpverification-content-image > h2{
+    text-align: center;
+    font-weight: 500;
+}
+
+.otpverification-image{
+    width: 140px;
+    height: 100%;
+    object-fit: contain;
+    margin: 20px 0px;
+}
+
+.optverification-form {
+    margin-top: 20px;
+}
+
+.optverification-form > input{
+    width: 50px;
+    height: 40px;
+    font-size: 22px;
+    text-align: center;
+    border: none;
+    border-bottom: 1px solid;
+    outline: none;
+    margin: 0px 5px;
+}
+
+.otpverification-button{
+    width: 120px;
+    padding: 6px;
+    font-size: 16px;
+    background: #18556b;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    margin-top: 50px;
+    cursor: pointer;
+}

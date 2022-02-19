@@ -1,0 +1,103 @@
+.header-div{
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    box-sizing: border-box;
+    box-shadow: 0 3px 15px rgb(0 0 0 / 7%);
+}
+
+.app-name{
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+}
+
+.app-name > h3{
+    font-size: 25px;
+    color: rgb(59,141,245);
+    margin-right: 5px;
+}
+
+.app-navbar{
+    height: 100%;
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+    position: relative;
+}
+
+.app-navbar > button{
+    background-color: rgb(59,141,245);
+    border: none;
+    border-radius: 6px;
+    padding: 10px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.header-notification-icon{
+   /* color: grey; */
+   border: 1px;
+   margin: 0px 30px;
+   cursor: pointer;
+}
+
+.show{
+    border: 1px solid black;
+}
+
+.my-name{
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+.my-name > h4{
+    font-weight: 500;
+    margin-left: 5px;
+    text-transform: capitalize;
+}
+
+
+
+/* media query */
+@media only screen and (max-width:600px) {
+    .app-name{
+        margin-left: 15px;
+    }
+    
+    .app-navbar{
+        margin-right: 10px;
+    }
+    
+    .app-navbar > button {
+        display: none;
+    }
+
+    .header-notification-icon{
+        margin: 0px 15px;
+    }
+
+    .my-name{
+        margin-right: 15px;
+    }
+
+    .my-name > h4{
+        display: none;
+    }
+    
+}
+
+@media only screen and (max-width:340px) {
+    .header-notification-icon {
+        margin: 0px 10px;
+    }
+
+    .my-name {
+        margin-right: 10px;
+    }
+}

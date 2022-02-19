@@ -1,0 +1,149 @@
+.form-main-div{
+    width: 55%;
+    height: 70%;
+    display: flex;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background-color:  rgb(241, 246, 251);
+    border-radius: 10px;
+}
+
+.form-title{
+    width: 45%;
+    background-color: rgb(59,141,245);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    padding: 10px;
+}
+
+.form-title > h1{
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.form-title > p{
+    text-align: center;
+}
+
+.form-button{
+    width: 120px;
+    height: 30px;
+    border: 1px solid white;
+    border-radius: 25px;
+    background-color: rgb(59,141,245);
+    color: white;
+    cursor: pointer;
+    margin-top: 20px;
+    text-transform: uppercase;
+}
+
+.signup-login-form{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.signup-login-form > h1{
+    margin-bottom: 30px;
+    text-transform: capitalize;
+    color: rgb(59,141,245);
+}
+
+.signup-login-form > input{
+    margin: 5px 0px;
+    padding: 7px;
+    width: 80%;
+    border: 1px solid rgb(199, 193, 193);
+    border-radius: 3px;
+    outline: none;
+    font-size: 15px;
+}
+
+.signup-login-form-button{
+    width: 80%;
+    padding: 7px;
+    font-size: 16px;
+    border: none;
+    background-color: rgb(59,141,245);
+    color: white;
+    cursor: pointer;
+    margin-top: 10px;
+    text-transform: uppercase;
+}
+
+.form-second-div{
+    display: none;
+    width: 100%;
+    text-align: center;
+}
+
+
+@media only screen and (max-width:1100px) {
+    .form-main-div{
+        width: 65%;
+    }
+}
+
+@media only screen and (max-width:950px) {
+    .form-main-div{
+        width: 75%;
+    }
+}
+
+@media only screen and (max-width:850px) {
+    .form-main-div{
+        width: 90%;
+    }
+}
+
+@media only screen and (max-width:600px) {
+    .form-main-div{
+        width: 70%;
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    .form-title{
+        display: none;
+    }
+
+    .form-second-div{
+        display: block;
+        width: 100%;
+        text-align: center;
+    }
+
+    .signup-login-form > input, .signup-login-form-button{
+        width: 92%;
+    }
+}
+
+
+@media only screen and (max-width:500px) {
+    .form-main-div{
+        width: 90%;
+    }
+}
+
+@media only screen and (max-width:360px) {
+    .form-main-div{
+        width: 95%;
+    }
+
+    .signup-login-form > input, .signup-login-form-button{
+        width: 100%;
+    }
+
+    .signup-login-form > h1 {
+        font-size: 30px;
+    }
+}

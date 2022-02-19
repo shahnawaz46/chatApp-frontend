@@ -1,0 +1,38 @@
+.showerror-main-div{
+    width: 30%;
+    position: absolute;
+    top: 2%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+
+@media only screen and (max-width:1200px) {
+    .showerror-main-div{
+        width: 35%;
+    }
+}
+
+@media only screen and (max-width:960px) {
+    .showerror-main-div{
+        width: 45%;
+    }
+}
+
+@media only screen and (max-width:750px) {
+    .showerror-main-div{
+        width: 55%;
+    }
+}
+
+@media only screen and (max-width:600px) {
+    .showerror-main-div{
+        width: 70%;
+    }
+}
+
+@media only screen and (max-width:500px) {
+    .showerror-main-div{
+        width: 90%;
+    }
+}
