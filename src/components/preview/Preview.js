@@ -1,11 +1,9 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import './Preview.css';
 import CloseIcon from '@mui/icons-material/Close';
 
 const Preview = ({ image, setImage, sendMessage }) => {
-    // useEffect(() => {
-    //     console.log("preivew useEffect() ", image);
-    // })
+
     return (
         <div className="preview-main-div">
             <div className="preview-image-div">

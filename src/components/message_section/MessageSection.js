@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './MessageSection.css'
 import Message from '../messages/Message'
 import Avatar from '@mui/material/Avatar';
@@ -7,67 +7,25 @@ import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import SentimentSatisfiedOutlinedIcon from '@mui/icons-material/SentimentSatisfiedOutlined';
 import SendIcon from '@mui/icons-material/Send';
 import ShowProfile from '../showProfile/ShowProfile';
-import { useNavigate } from 'react-router-dom';
-import { useStore } from '../../context/Context';
 import { useRef } from 'react';
-import { userImages } from '../../axios/AxiosInstance';
-import Preview from '../../preview/Preview';
+import Preview from '../preview/Preview';
 import 'emoji-mart/css/emoji-mart.css'
 import { Picker } from 'emoji-mart'
 import Layout from '../layout/Layout';
+import { useParams } from 'react-router-dom';
 
 
 const MessageSection = () => {
-    const navigate = useNavigate()
-    const { state, dispatch } = useStore()
-
     const [showProfile, setShowProfile] = useState(false)
+    const { userName } = useParams()
+    // console.log(userName);
 
-    const bottomScrollRef = useRef(null)
     const messageRef = useRef(null)
 
     const [previewImage, setPreviewImage] = useState(false)
     const [showImage, setShowImage] = useState(null)
 
     const [showEmoji, setShowEmoji] = useState(false)
-
-    const sortNames = (senderName, receiverName) => {
-        return [senderName, receiverName].sort().join("-")
-    }
-
-    const sendMessage = () => {
-        if (!messageRef.current.value && !showImage) return
-
-        let data = {
-            senderName: state.loginUser.name,
-            receiverName: state.selectedUser.name,
-            message: messageRef.current.value ? messageRef.current.value : null,
-            media: showImage ? showImage : null,
-            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-            isSeen: false
-        }
-
-        // console.log(data);
-
-        state.socket.emit("send_message", data)
-
-        const key = sortNames(data.senderName, data.receiverName)
-
-        data = { ...data, isSeen: true }
-
-        if (key in state.allMessages) {
-
-            dispatch({ type: "PUSH_MESSAGE", payload: { key, data } })
-
-        } else {
-            dispatch({ type: "ADD_MESSAGE", payload: { key, data } })
-        }
-
-        messageRef.current.value = null
-        setShowImage(false)
-        previewImage && setPreviewImage(false)
-        showEmoji && setShowEmoji(false)
-    }
 
     const sendImage = (e) => {
         const fileReader = new FileReader()
@@ -90,40 +48,17 @@ const MessageSection = () => {
 
     }
 
-    const goBack = () => {
-        navigate(-1)
-    }
-
-    useEffect(() => {
-        if (Object.keys(state.selectedUser).length === 0) {
-            navigate('/', { replace: true })
-        }
-        console.log("message section")
-    }, [])
-
-    useEffect(() => {
-        const key = sortNames(state.loginUser.name, state.selectedUser.name)
-        if (key in state.allMessages && Object.keys(state.selectedUser).length > 0) {
-            bottomScrollRef.current.scrollIntoView({
-                // behavior: "smooth",
-                block: "end",
-            });
-        }
-    }, [state.allMessages, state.selectedUser])
-
-    // console.log("message");
-
     return (
         <>
             <Layout>
-                <div className="message-section-div" id={Object.keys(state.selectedUser).length === 0 ? "hide-alluser-div" : ""}>
+                <div className="message-section-div" >
                     <div className="messagesection-user">
 
-                        <BiArrowBack className='messagesection-go-back-arrow' onClick={goBack} />
+                        <BiArrowBack className='messagesection-go-back-arrow' />
 
-                        <Avatar src={state.selectedUser.image && userImages(state.selectedUser.image)} onClick={() => setShowProfile(true)} style={{ cursor: "pointer" }} />
-                        <div className="messagesection-user-name">
-                            <h4>{state.selectedUser.name}</h4>
+                        <Avatar src="" style={{ cursor: "pointer" }} />
+                        <div className="messagesection-user-name" onClick={() => setShowProfile(true)} >
+                            <h4>{"somyaranjan"}</h4>
                             <p>Online</p>
                         </div>
                         <div className="messagesection-icon-div">
@@ -133,14 +68,9 @@ const MessageSection = () => {
                     </div>
 
                     <div className="messagesection-chat">
-                        {
-                            Object.keys(state.allMessages).length > 0 &&
-                            state.allMessages[sortNames(state.loginUser.name, state.selectedUser.name)] &&
-                            state.allMessages[sortNames(state.loginUser.name, state.selectedUser.name)].map((value, index) =>
-                                <Message key={index} owner={value.senderName === state.loginUser.name && "owner"} message={value.message} time={value.time} media={value.media} />
-                            )
-                        }
-                        <div id="bottom-reference" ref={bottomScrollRef} />
+                        <Message owner={"owner"} message={"hello how are you"} time={"12:05"} />
+                        <Message message={"hy i am fine"} time={"12:06"} />
+                        <div id="bottom-reference" />
                     </div>
 
                     <div className="messagesection-send-message">
@@ -153,7 +83,7 @@ const MessageSection = () => {
 
                         <input type="text" placeholder="Type your message..." ref={messageRef} />
                         <SentimentSatisfiedOutlinedIcon style={{ cursor: 'pointer' }} onClick={() => setShowEmoji(prev => !prev)} />
-                        <SendIcon style={{ marginLeft: "10px", cursor: "pointer" }} onClick={sendMessage} />
+                        <SendIcon style={{ marginLeft: "10px", cursor: "pointer" }} />
                     </div>
                 </div>
             </Layout>
@@ -168,7 +98,7 @@ const MessageSection = () => {
             {/* preview image before send to the user */}
             {
                 previewImage &&
-                <Preview image={showImage} setImage={setPreviewImage} sendMessage={sendMessage} />
+                <Preview image={showImage} setImage={setPreviewImage} />
             }
 
             {/* user profile div for showing transition */}
@@ -176,7 +106,7 @@ const MessageSection = () => {
                 showProfile &&
                 <div className='showprofile-main-div'>
                     <div className="showprofile-div condition">
-                        <ShowProfile showProfileFnc={setShowProfile} userDetail={state.selectedUser} />
+                        <ShowProfile setShowProfile={setShowProfile} />
                     </div>
                 </div>
             }

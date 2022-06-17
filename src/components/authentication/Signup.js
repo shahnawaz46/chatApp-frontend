@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import Form from '../form/Form';
-import { AxiosInstance } from '../../axios/AxiosInstance';
 import ShowError from '../show_error/ShowError';
+import { AxiosInstance } from '../../axios/AxiosInstance';
 
 
 const Signup = () => {
@@ -18,18 +18,12 @@ const Signup = () => {
     const signupHandle = async (e) => {
         e.preventDefault()
 
+        const userInfo = { name, email, password, number }
+
         try {
-            const userInfo = {
-                name, email, number, password
-            }
+            const res = await AxiosInstance.post("/api/user/signup", userInfo)
 
-            const res = await AxiosInstance.post('/api/user/signup', userInfo)
-            // console.log(res.data)
-
-            localStorage.setItem("userId", JSON.stringify(res.data.userId))
-
-            navigate('/otp/verification', { replace: true })
-            return null
+            navigate("/otp/verification", { state: { userId: res.data.userId } })
 
         } catch (error) {
             error.response &&
@@ -37,14 +31,13 @@ const Signup = () => {
         }
     }
 
-    if (localStorage.getItem("user")) {
-        navigate('/', { replace: true })
-    }
+    if (sessionStorage.getItem("chat_user"))
+        return <Navigate to={"/"} replace />
 
     return (
         <>
-            <Form button={"sign in"} parag={'login'} link={'/login'}>
-                <form onSubmit={signupHandle} className='signup-login-form'>
+            <Form button={"login"} parag={'login'} link={'/login'}>
+                <form className='signup-login-form' onSubmit={signupHandle}>
                     <h1>create account</h1>
                     <input type="text" placeholder='Name' onChange={(e) => setName(e.target.value)} required />
                     <input type="email" placeholder='Email' onChange={e => setEmail(e.target.value)} required />

@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Form from '../form/Form';
-import { useNavigate, Link } from 'react-router-dom';
-import { useStore } from '../../context/Context';
-import { AxiosInstance } from '../../axios/AxiosInstance';
+import { useNavigate, Link, Navigate } from 'react-router-dom';
 import ShowError from '../show_error/ShowError';
+import { AxiosInstance } from '../../axios/AxiosInstance';
 
 const Login = () => {
-    const { state, dispatch } = useStore()
     const navigate = useNavigate()
 
     const [email, setEmail] = useState()
@@ -15,34 +13,27 @@ const Login = () => {
 
     const loginHandle = async (e) => {
         e.preventDefault()
+
         try {
             const res = await AxiosInstance.post('/api/user/signin', { email, password })
-            // console.log(res)
-            dispatch({ type: "LOGIN_USER", payload: res.data.user })
-            state.socket.emit("user_login", res.data.user._id)
 
-            localStorage.setItem("user", JSON.stringify(res.data.user))
+            sessionStorage.setItem("chat_user", JSON.stringify(res.data.user))
 
-            navigate('/', { replace: true })
-            return null
+            navigate("/", { replace: true })
 
-        } catch (error) {
-            error.response &&
-                // console.log(error.response.data)
-                setError(error.response.data.error)
+        } catch (err) {
+            err.response &&
+                setError(err.response.data.error)
         }
     }
 
-    useEffect(() => {
-        if (localStorage.getItem("user")) {
-            navigate('/', { replace: true })
-        }
-    }, [])
+    if (sessionStorage.getItem("chat_user"))
+        return <Navigate to={"/"} replace />
 
     return (
         <>
             <Form button={"sing up"} parag={'signup'} link={'/signup'}>
-                <form onSubmit={loginHandle} className='signup-login-form'>
+                <form className='signup-login-form' onSubmit={loginHandle}>
                     <h1>Login Account</h1>
                     <input type="email" placeholder='Email' onChange={(e) => setEmail(e.target.value)} required />
                     <input type="password" placeholder='Password' onChange={(e) => setPassword(e.target.value)} required />

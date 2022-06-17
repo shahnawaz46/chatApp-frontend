@@ -3,33 +3,23 @@ import './Header.css';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Avatar from '@mui/material/Avatar';
-import { useStore } from '../../context/Context';
-import { useNavigate } from 'react-router-dom';
-import { userImages } from '../../axios/AxiosInstance';
 import ShowProfile from '../showProfile/ShowProfile';
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
-    const { state: { loginUser, socket }, dispatch } = useStore()
     const navigate = useNavigate()
 
+    const [user, setUser] = useState()
     const [showProfile, setShowProfile] = useState(false)
 
     const logout = () => {
-        if (localStorage.getItem("user")) {
-            localStorage.removeItem("user")
-
-            socket.emit("user_logout", loginUser._id)
-
-            dispatch({ type: "USER_LOGOUT" })
-            navigate("/login", { replace: true })
-            return null
-        }
+        sessionStorage.removeItem("chat_user")
+        navigate("/login", { replace: true })
     }
 
-    // console.log(loginUser)
-    // useEffect(() => {
-    //     console.log("header useEffect()");
-    // }, [])
+    useEffect(() => {
+        sessionStorage.getItem("chat_user") && setUser(JSON.parse(sessionStorage.getItem('chat_user')))
+    }, [])
 
     return (
         <>
@@ -42,10 +32,10 @@ const Header = () => {
                     <button onClick={() => alert("this function is not available right now")}>Invite Friends</button>
                     <NotificationsNoneIcon className='header-notification-icon' onClick={() => alert("this function is not available right now")} />
                     <div className="my-name" onClick={() => setShowProfile(true)}>
-                        <Avatar src={loginUser.image && userImages(loginUser.image)} />
-                        <h4>{loginUser.name}</h4>
+                        <Avatar src="" />
+                        <h4>{user?.name}</h4>
                     </div>
-                    <LockOutlinedIcon onClick={logout} style={{ cursor: "pointer" }} />
+                    <LockOutlinedIcon style={{ cursor: "pointer" }} onClick={logout} />
                 </div>
             </div>
 
@@ -54,7 +44,7 @@ const Header = () => {
                 showProfile &&
                 <div className='showprofile-main-div'>
                     <div className="showprofile-div condition">
-                        <ShowProfile showProfileFnc={setShowProfile} userDetail={loginUser} />
+                        <ShowProfile setShowProfile={setShowProfile} />
                     </div>
                 </div>
             }
