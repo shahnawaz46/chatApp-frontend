@@ -1,23 +1,23 @@
-.alluser-div{
+.alluser-div {
     background-color: rgb(241, 246, 251);
-    border-right: 1px solid rgb(226,222,222);
+    border-right: 1px solid rgb(226, 222, 222);
     width: 30%;
     height: 100%;
     padding: 25px 25px 0px 25px;
     box-sizing: border-box;
 }
 
-.alluser-div > h3{
+.alluser-div>h3 {
     font-weight: 500;
 }
 
-.alluser-div > h4{
+.alluser-div>h4 {
     font-weight: 500;
     margin-top: 10px;
     margin-bottom: 15px;
 }
 
-.alluser-search-bar{
+.alluser-search-bar {
     background-color: white;
     display: flex;
     align-items: center;
@@ -28,7 +28,7 @@
     box-sizing: border-box;
 }
 
-.alluser-search-bar > input{
+.alluser-search-bar>input {
     width: 100%;
     padding: 13px 10px;
     border: none;
@@ -37,7 +37,7 @@
     flex: 1;
 }
 
-.alluser-avatars{
+/* .alluser-avatars{
     display: flex;
     align-items: center;
     overflow-x: scroll;
@@ -47,23 +47,22 @@
 
 .alluser-avatars::-webkit-scrollbar{
     display: none;
-}
+} */
 
-.alluser-list{
+.alluser-list {
     /* border: 1px solid blue; */
     /* height: 366px; */
-    height: calc(100vh - 291px);
+    height: calc(100vh - 240px);
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
-    cursor: pointer;
 }
 
-.alluser-list::-webkit-scrollbar{
+.alluser-list::-webkit-scrollbar {
     display: none;
 }
 
-.user-div{
+.user-div {
     background-color: white;
     display: flex;
     align-items: center;
@@ -74,32 +73,33 @@
     border-radius: 5px;
 }
 
-.user-name-message{
+.user-name-message {
     width: 100%;
     margin-left: 15px;
+    cursor: pointer;
 }
 
-.user-name{
+.user-name {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
 
-.user-name-and-online{
+.user-name-and-online {
     line-height: 15px;
 }
 
-.user-name-and-online > h4{
+.user-name-and-online>h4 {
     font-weight: 500;
     text-transform: capitalize;
 }
 
-.user-name-and-online > span{
-   font-size: 13px;
+.user-name-and-online>span {
+    font-size: 13px;
 }
 
-.user-unseen-message{
+.user-unseen-message {
     background: #3b8df5;
     color: white;
     border-radius: 50%;
@@ -111,7 +111,7 @@
     align-items: center;
 }
 
-a{
+a {
     color: black;
     text-decoration: none;
 }
@@ -129,11 +129,11 @@ a{
         width: 100%;
     }
 
-    #hide-alluser-div{
+    #hide-alluser-div {
         display: none;
     }
 
-    .alluser-list{
+    /* .alluser-list {
         height: calc(100vh - 291px);
-    }
+    } */
 }

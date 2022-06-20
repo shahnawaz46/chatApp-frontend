@@ -17,7 +17,7 @@ const Login = () => {
         try {
             const res = await AxiosInstance.post('/api/user/signin', { email, password })
 
-            sessionStorage.setItem("chat_user", JSON.stringify(res.data.user))
+            sessionStorage.setItem("chat_user", res.data.userId)
 
             navigate("/", { replace: true })
 

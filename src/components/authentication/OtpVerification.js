@@ -16,7 +16,6 @@ const OtpVerification = () => {
         e.preventDefault()
 
         const allOtp = otp.otp1 + otp.otp2 + otp.otp3 + otp.otp4
-        console.log(allOtp);
 
         if (allOtp.length !== 4)
             setError("OTP is missing")
@@ -27,7 +26,8 @@ const OtpVerification = () => {
 
             try {
                 const res = await AxiosInstance.post("/api/user/otp/verification", userInfo)
-                sessionStorage.setItem("chat_user", JSON.stringify(res.data.user))
+
+                sessionStorage.setItem("chat_user", res.data.userId)
 
                 navigate("/", { replace: true })
 
@@ -60,8 +60,6 @@ const OtpVerification = () => {
 
     if (sessionStorage.getItem("chat_user"))
         return <Navigate to={"/"} replace />
-
-    console.log(otp);
 
     return (
         <>
