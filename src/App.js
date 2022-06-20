@@ -10,7 +10,9 @@ import { useStore } from './context/Context';
 
 
 import io from 'socket.io-client'
-const socket = io('http://localhost:9000')
+const url = 'https://chatapp-server-nodejs.herokuapp.com'
+// const url = 'http://localhost:9000'
+const socket = io(url)
 
 
 function App() {
