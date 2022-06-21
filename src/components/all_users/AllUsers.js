@@ -4,13 +4,13 @@ import SearchIcon from '@mui/icons-material/Search';
 import Avatar from '@mui/material/Avatar';
 import { useNavigate } from 'react-router-dom';
 import { useStore } from '../../context/Context';
-import { MdPersonAddAlt1 } from 'react-icons/md'
+import { MdPersonAddAlt1, MdCircle, MdCheck } from 'react-icons/md'
 import { AxiosInstance } from '../../axios/AxiosInstance'
 
 
 const AllUsers = ({ userName }) => {
     const navigate = useNavigate()
-    const { state: { loginUser, allUsers, socket } } = useStore()
+    const { state: { loginUser, socket } } = useStore()
 
     const [friends, setFriends] = useState([])
 
@@ -35,9 +35,15 @@ const AllUsers = ({ userName }) => {
                 }
                 const res = await AxiosInstance.post('/api/user/search', searchInfo)
 
-                allSearchUser = res.data.allSearchUser.map((item) => ({ ...item, notFriend: true }))
+                allSearchUser = res.data.allSearchUser.map((item) => {
+                    if (item?.notifications?.find((noti) => noti.userId === loginUser._id)) {
+                        return { ...item, notFriend: true, requestAlreadySent: true }
+                    } else
+                        return { ...item, notFriend: true }
+                })
             }
 
+            console.log(allSearchUser);
             setFriends([...loginUserFilterFriends, ...allSearchUser]);
 
         } else {
@@ -45,14 +51,20 @@ const AllUsers = ({ userName }) => {
         }
     }
 
-    const addFriend = (userId) => {
+    const addFriend = (item, index) => {
         const request = {
-            receiverId: userId,
+            receiverId: item._id,
             senderId: loginUser._id,
             message: `${loginUser.name} send you friend request`
         }
         // console.log(userId);
         socket.emit("friend_request_send", request)
+
+        // const tempfriends = friends means tempFriends is pointing to the friends state
+        // const tempfriends = [...friends] means i'm copying the friends list into the tempfriends list
+        const tempFriends = [...friends]
+        tempFriends[index].requestAlreadySent = true
+        setFriends(tempFriends)
     }
 
     useEffect(() => {
@@ -85,7 +97,18 @@ const AllUsers = ({ userName }) => {
                                             <div className="user-name" onClick={() => openChat("somyaranjan")}>
                                                 <div className="user-name-and-online">
                                                     <h4>{item?.name}</h4>
-                                                    <span>Online</span>
+                                                    {
+                                                        item?.online ?
+                                                            <div className='user-online-icon'>
+                                                                <span>Online</span>
+                                                                <MdCircle style={{ color: 'green', fontSize: '12px', marginBottom: '-2px' }} />
+                                                            </div>
+                                                            :
+                                                            <div className='user-online-icon'>
+                                                                <span>Offline</span>
+                                                                {/* <MdCircle style={{ color: 'red', fontSize: '12px' }} /> */}
+                                                            </div>
+                                                    }
                                                 </div>
                                                 {/* <span className='user-unseen-message'>5</span> */}
                                             </div>
@@ -95,7 +118,11 @@ const AllUsers = ({ userName }) => {
                                                     <h4>{item?.name}</h4>
                                                     <span>Not Friend</span>
                                                 </div>
-                                                <MdPersonAddAlt1 style={{ fontSize: '20px', color: "dimgrey" }} onClick={() => addFriend(item._id)} />
+                                                {
+                                                    item.requestAlreadySent ?
+                                                        <MdCheck style={{ fontSize: '20px', color: "green" }} />
+                                                        : <MdPersonAddAlt1 style={{ fontSize: '20px', color: "dimgrey", cursor: 'pointer' }} onClick={() => addFriend(item, index)} />
+                                                }
                                             </div>
                                     }
                                 </div>

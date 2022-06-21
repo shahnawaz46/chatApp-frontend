@@ -7,6 +7,7 @@ import ShowProfile from '../showProfile/ShowProfile';
 import { useNavigate } from 'react-router-dom';
 import { useStore } from '../../context/Context';
 import { IoClose, IoCheckmarkSharp } from 'react-icons/io5';
+import { AxiosInstance } from '../../axios/AxiosInstance';
 
 const Header = () => {
     const navigate = useNavigate()
@@ -17,7 +18,7 @@ const Header = () => {
     const [showProfile, setShowProfile] = useState(false)
 
     const rejectFriendRequest = (item) => {
-        console.log("reject", item);
+        // console.log("reject", item);
         const request = {
             senderId: item.userId,
             receiverId: loginUser._id,
@@ -32,8 +33,12 @@ const Header = () => {
         socket.emit("accept_friend_request", bothIds)
     }
 
-    const logout = () => {
+    const logout = async () => {
+        // await AxiosInstance.post('/api/user/logout', { _id: loginUser._id })
+        socket.emit("offline_user", (loginUser._id))
+
         sessionStorage.removeItem("chat_user")
+
         navigate("/login", { replace: true })
     }
 

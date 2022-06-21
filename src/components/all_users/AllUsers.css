@@ -76,7 +76,6 @@
 .user-name-message {
     width: 100%;
     margin-left: 15px;
-    cursor: pointer;
 }
 
 .user-name {
@@ -88,6 +87,7 @@
 
 .user-name-and-online {
     line-height: 15px;
+    cursor: pointer;
 }
 
 .user-name-and-online>h4 {
@@ -95,8 +95,15 @@
     text-transform: capitalize;
 }
 
-.user-name-and-online>span {
-    font-size: 13px;
+.user-online-icon {
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+}
+
+.user-online-icon>span {
+    font-size: 15px;
+    margin: 0px 5px;
 }
 
 .user-unseen-message {

@@ -36,6 +36,10 @@ function App() {
       dispatch({ type: 'UPDATE_USER', payload: updatedUser })
     })
 
+    socket.on("user_online", (updatedUser) => {
+      dispatch({ type: 'UPDATE_USER', payload: updatedUser })
+    })
+
   }, [])
 
   return (

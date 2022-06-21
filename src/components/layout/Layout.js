@@ -7,20 +7,7 @@ import { useStore } from '../../context/Context';
 
 const Home = ({ children }) => {
     const { userName } = useParams()
-    const { state: { socket }, dispatch } = useStore()
-
-    useEffect(() => {
-        const getLoginUserAndAllUser = async () => {
-            const userId = sessionStorage.getItem('chat_user')
-            if (userId) {
-                const res = await AxiosInstance.get(`/api/user/get/${userId}`)
-                dispatch({ type: "UPDATE_USER", payload: res.data.loginUser })
-            }
-        }
-
-        getLoginUserAndAllUser()
-
-    }, [])
+    const { state: { socket } } = useStore()
 
     useEffect(() => {
         const userId = sessionStorage.getItem("chat_user")
