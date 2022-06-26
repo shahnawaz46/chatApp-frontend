@@ -92,7 +92,7 @@
     height: 100%;
     position: fixed;
     top: 0;
-    background: #262626;
+    background: rgba(0, 0, 0, 0.8);
     z-index: 5;
 }
 
@@ -115,6 +115,7 @@
 @media only screen and (max-width:768px) {
     .messagesection-go-back-arrow {
         display: block;
+        cursor: pointer;
         margin-right: 10px;
     }
 

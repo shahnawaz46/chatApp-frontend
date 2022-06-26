@@ -14,8 +14,8 @@ const AllUsers = ({ userName }) => {
 
     const [friends, setFriends] = useState([])
 
-    const openChat = (value) => {
-        navigate(`/myaccount/user=${value}`)
+    const openChat = (user) => {
+        navigate(`/myaccount/user=${user.name}`, { state: { online: user.online, userId: user._id } })
         return null
     }
 
@@ -43,7 +43,7 @@ const AllUsers = ({ userName }) => {
                 })
             }
 
-            console.log(allSearchUser);
+            // console.log(allSearchUser);
             setFriends([...loginUserFilterFriends, ...allSearchUser]);
 
         } else {
@@ -94,8 +94,8 @@ const AllUsers = ({ userName }) => {
                                 <div className="user-name-message">
                                     {
                                         !(item?.notFriend) ?
-                                            <div className="user-name" onClick={() => openChat("somyaranjan")}>
-                                                <div className="user-name-and-online">
+                                            <div className="user-name" onClick={() => openChat(item)}>
+                                                <div className="user-name-and-online" >
                                                     <h4>{item?.name}</h4>
                                                     {
                                                         item?.online ?
@@ -115,8 +115,8 @@ const AllUsers = ({ userName }) => {
                                             :
                                             <div className="user-name">
                                                 <div className="user-name-and-online">
-                                                    <h4>{item?.name}</h4>
-                                                    <span>Not Friend</span>
+                                                    <h4 style={{ marginBottom: '5px' }}>{item?.name}</h4>
+                                                    <span style={{ fontSize: '15px', margin: '0px 5px' }}>Not Friend</span>
                                                 </div>
                                                 {
                                                     item.requestAlreadySent ?

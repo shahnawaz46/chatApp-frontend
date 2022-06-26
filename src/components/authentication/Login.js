@@ -3,9 +3,11 @@ import Form from '../form/Form';
 import { useNavigate, Link, Navigate } from 'react-router-dom';
 import ShowError from '../show_error/ShowError';
 import { AxiosInstance } from '../../axios/AxiosInstance';
+import { useStore } from '../../context/Context';
 
 const Login = () => {
     const navigate = useNavigate()
+    const { state: { socket } } = useStore()
 
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
@@ -18,6 +20,8 @@ const Login = () => {
             const res = await AxiosInstance.post('/api/user/signin', { email, password })
 
             sessionStorage.setItem("chat_user", res.data.userId)
+
+            socket.emit("online_user", res.data.userId)
 
             navigate("/", { replace: true })
 

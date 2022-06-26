@@ -39,6 +39,8 @@ const Header = () => {
 
         sessionStorage.removeItem("chat_user")
 
+        dispatch({ type: "USER_LOGOUT" })
+
         navigate("/login", { replace: true })
     }
 
@@ -93,7 +95,7 @@ const Header = () => {
                 showProfile &&
                 <div className='showprofile-main-div'>
                     <div className="showprofile-div condition">
-                        <ShowProfile setShowProfile={setShowProfile} />
+                        <ShowProfile setShowProfile={setShowProfile} info={loginUser} />
                     </div>
                 </div>
             }

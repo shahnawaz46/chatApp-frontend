@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom';
 
 const ProtectedRoute = ({ children }) => {
     const isUserLogin = sessionStorage.getItem("chat_user")
-    // console.log(isUserLogin);
+    // console.log(children);
 
     if (!isUserLogin)
         return <Navigate to={"/login"} replace />

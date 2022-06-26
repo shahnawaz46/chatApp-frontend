@@ -10,8 +10,9 @@ import { useStore } from './context/Context';
 
 
 import io from 'socket.io-client'
-const url = 'https://chatapp-server-nodejs.herokuapp.com'
-// const url = 'http://localhost:9000'
+import { keyframes } from '@emotion/react';
+// const url = 'https://chatapp-server-nodejs.herokuapp.com'
+const url = 'http://localhost:9000'
 const socket = io(url)
 
 
@@ -23,6 +24,10 @@ function App() {
   }, [])
 
   useEffect(() => {
+
+    socket.on("user_online", (updatedUser) => {
+      dispatch({ type: 'UPDATE_USER', payload: updatedUser })
+    })
 
     socket.on("friend_request_receive", (updatedUser) => {
       dispatch({ type: 'UPDATE_USER', payload: updatedUser })
@@ -36,8 +41,12 @@ function App() {
       dispatch({ type: 'UPDATE_USER', payload: updatedUser })
     })
 
-    socket.on("user_online", (updatedUser) => {
-      dispatch({ type: 'UPDATE_USER', payload: updatedUser })
+    socket.on("receive_message", ({ key, msg }) => {
+      dispatch({ type: 'MESSAGES', payload: { key, msg } })
+    })
+
+    socket.on("retrieve_message_client", (messagesObj) => {
+      dispatch({ type: 'FETCH_MESSAGE', payload: messagesObj })
     })
 
   }, [])

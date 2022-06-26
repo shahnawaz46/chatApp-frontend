@@ -3,8 +3,10 @@ import './OtpVerification.css'
 import ShowError from '../show_error/ShowError';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { AxiosInstance } from '../../axios/AxiosInstance';
+import { useStore } from '../../context/Context';
 
 const OtpVerification = () => {
+    const { state: { socket } } = useStore()
     const { state } = useLocation()
     const navigate = useNavigate()
 
@@ -28,6 +30,8 @@ const OtpVerification = () => {
                 const res = await AxiosInstance.post("/api/user/otp/verification", userInfo)
 
                 sessionStorage.setItem("chat_user", res.data.userId)
+
+                socket.emit("online_user", res.data.userId)
 
                 navigate("/", { replace: true })
 

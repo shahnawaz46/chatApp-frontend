@@ -1,5 +1,6 @@
 import React from 'react';
 import './Message.css';
+import { format } from 'timeago.js'
 
 const Message = ({ owner, message, time, media }) => {
     // console.log("media", media);
@@ -15,7 +16,7 @@ const Message = ({ owner, message, time, media }) => {
                     {message}
                 </p>
             }
-            <span className='message-time'>{time}</span>
+            <span className='message-time'>{format(time)}</span>
         </div>
     );
 };

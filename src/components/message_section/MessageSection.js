@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './MessageSection.css'
 import Message from '../messages/Message'
 import Avatar from '@mui/material/Avatar';
@@ -12,20 +12,42 @@ import Preview from '../preview/Preview';
 import 'emoji-mart/css/emoji-mart.css'
 import { Picker } from 'emoji-mart'
 import Layout from '../layout/Layout';
-import { useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useStore } from '../../context/Context';
 
 
 const MessageSection = () => {
-    const [showProfile, setShowProfile] = useState(false)
+    const { state: { loginUser, socket, allMessages } } = useStore()
     const { userName } = useParams()
-    // console.log(userName);
+    const { state: { online, userId } } = useLocation()
+    const navigate = useNavigate()
 
+    const [showProfile, setShowProfile] = useState(false)
     const messageRef = useRef(null)
+    const scrollBottomRef = useRef(null)
 
     const [previewImage, setPreviewImage] = useState(false)
     const [showImage, setShowImage] = useState(null)
 
     const [showEmoji, setShowEmoji] = useState(false)
+
+
+    const sendMessage = () => {
+
+        if (messageRef.current.value === "")
+            return
+
+        const messageDetail = {
+            from: loginUser._id,
+            to: userId,
+            message: messageRef.current.value,
+            time: Date.now()
+        }
+
+        socket.emit("send_message", messageDetail)
+
+        messageRef.current.value = null
+    }
 
     const sendImage = (e) => {
         const fileReader = new FileReader()
@@ -48,18 +70,33 @@ const MessageSection = () => {
 
     }
 
+    const goBack = () => {
+        console.log("back");
+        navigate(-1)
+        return
+    }
+
+    useEffect(() => {
+        scrollBottomRef?.current?.scrollIntoView({ behaviour: "smooth" })
+    }, [allMessages])
+
     return (
         <>
             <Layout>
                 <div className="message-section-div" >
                     <div className="messagesection-user">
 
-                        <BiArrowBack className='messagesection-go-back-arrow' />
+                        <BiArrowBack className='messagesection-go-back-arrow' onClick={goBack} />
 
                         <Avatar src="" style={{ cursor: "pointer" }} />
                         <div className="messagesection-user-name" onClick={() => setShowProfile(true)} >
-                            <h4>{"somyaranjan"}</h4>
-                            <p>Online</p>
+                            <h4>{userName}</h4>
+                            {
+                                online ?
+                                    <p>Online</p>
+                                    :
+                                    <p>Offline</p>
+                            }
                         </div>
                         <div className="messagesection-icon-div">
                             <BiCamera className='icon' onClick={() => alert("this function is not available right now")} />
@@ -68,9 +105,15 @@ const MessageSection = () => {
                     </div>
 
                     <div className="messagesection-chat">
-                        <Message owner={"owner"} message={"hello how are you"} time={"12:05"} />
-                        <Message message={"hy i am fine"} time={"12:06"} />
-                        <div id="bottom-reference" />
+                        {
+                            Object.keys(allMessages).length > 0 &&
+                            allMessages[[loginUser._id, userId].sort().join('-')] &&
+                            allMessages[[loginUser._id, userId].sort().join('-')].map((msg, index) =>
+                                <Message key={index} owner={msg.from === loginUser._id && "owner"} message={msg.message} time={msg.time} />
+                            )
+                        }
+
+                        <div id="bottom-reference" ref={scrollBottomRef} />
                     </div>
 
                     <div className="messagesection-send-message">
@@ -83,7 +126,7 @@ const MessageSection = () => {
 
                         <input type="text" placeholder="Type your message..." ref={messageRef} />
                         <SentimentSatisfiedOutlinedIcon style={{ cursor: 'pointer' }} onClick={() => setShowEmoji(prev => !prev)} />
-                        <SendIcon style={{ marginLeft: "10px", cursor: "pointer" }} />
+                        <SendIcon style={{ marginLeft: "10px", cursor: "pointer" }} onClick={sendMessage} />
                     </div>
                 </div>
             </Layout>
