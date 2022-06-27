@@ -1,21 +1,31 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './AllUsers.css';
 import SearchIcon from '@mui/icons-material/Search';
 import Avatar from '@mui/material/Avatar';
 import { useNavigate } from 'react-router-dom';
 import { useStore } from '../../context/Context';
 import { MdPersonAddAlt1, MdCircle, MdCheck } from 'react-icons/md'
-import { AxiosInstance } from '../../axios/AxiosInstance'
+import { AxiosInstance, userImages } from '../../axios/AxiosInstance'
 
 
 const AllUsers = ({ userName }) => {
     const navigate = useNavigate()
     const { state: { loginUser, socket } } = useStore()
 
-    const [friends, setFriends] = useState([])
+    const [friends, setFriends] = useState(loginUser.friends)
+    const chatRef = useRef(false)
 
-    const openChat = (user) => {
-        navigate(`/myaccount/user=${user.name}`, { state: { online: user.online, userId: user._id } })
+    // console.log("allUser Comp", friends);
+
+    const openChat = (userId, userName, index) => {
+        if (chatRef.current === false) {
+            chatRef.current = true
+            navigate(`/user=${userName}`, { state: { index, userId } })
+        }
+        else
+            navigate(`/user=${userName}`, { replace: true, state: { index, userId } })
+
+
         return null
     }
 
@@ -90,11 +100,11 @@ const AllUsers = ({ userName }) => {
                     friends.length > 0 ? friends.map((item, index) => {
                         return (
                             <div key={index} className="user-div" >
-                                <Avatar src="" />
+                                <Avatar src={item.image && userImages(item.image)} />
                                 <div className="user-name-message">
                                     {
                                         !(item?.notFriend) ?
-                                            <div className="user-name" onClick={() => openChat(item)}>
+                                            <div className="user-name" onClick={() => openChat(item._id, item.name, index)}>
                                                 <div className="user-name-and-online" >
                                                     <h4>{item?.name}</h4>
                                                     {
@@ -137,4 +147,4 @@ const AllUsers = ({ userName }) => {
     );
 };
 
-export default AllUsers;
+export default React.memo(AllUsers);

@@ -7,7 +7,8 @@ import loader from '../../gif_loader/loader_3.gif'
 
 const Home = ({ children }) => {
     const { userName } = useParams()
-    const { state: { socket, loginUser, allMessages } } = useStore()
+    const { state: { socket, loginUser } } = useStore()
+
 
     // this useEffect will invoked and call online_user event when user refresh the page
     // and i will get login user data 
@@ -20,17 +21,14 @@ const Home = ({ children }) => {
         }
     }, [socket])
 
+    // console.log("Layout comp");
+
     return (
         <>
 
             {
                 Object.keys(loginUser).length === 0 ?
-                    <>
-                        {/* <div style={{ width: "100%", height: "0", paddingBottom: "100%", position: "relative" }}>
-                   <iframe src="https://giphy.com/embed/xTkcEQACH24SMPxIQg" width="100%" height="100%" style={{ position: "absolute" }} frameBorder="0" className="giphy-embed" allowFullScreen></iframe>
-               </div> */}
-                        <img src={loader} alt="loader" style={{ position: 'absolute', top: '50%', left: '50%', transform: "translate(-50%,-50%)" }} />
-                    </>
+                    <img src={loader} alt="loader" style={{ position: 'absolute', top: '50%', left: '50%', transform: "translate(-50%,-50%)" }} />
                     :
                     <>
                         <Header />
@@ -44,4 +42,4 @@ const Home = ({ children }) => {
     )
 }
 
-export default Home
+export default React.memo(Home)

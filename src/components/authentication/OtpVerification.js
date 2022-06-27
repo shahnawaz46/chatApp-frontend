@@ -31,8 +31,6 @@ const OtpVerification = () => {
 
                 sessionStorage.setItem("chat_user", res.data.userId)
 
-                socket.emit("online_user", res.data.userId)
-
                 navigate("/", { replace: true })
 
             } catch (err) {

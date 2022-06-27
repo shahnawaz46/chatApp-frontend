@@ -23,7 +23,8 @@
 
 .messagesection-user-name {
     flex: 0.90;
-    margin-left: 15px
+    margin: 0px 15px;
+    cursor: pointer;
 }
 
 .messagesection-user-name>h4 {

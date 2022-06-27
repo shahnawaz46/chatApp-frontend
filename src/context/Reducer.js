@@ -20,6 +20,16 @@ export const reducer = (state, action) => {
                 loginUser: action.payload
             }
 
+        case "FRIEND_REMOVE":
+            const tempMessages = { ...state.allMessages }
+            delete tempMessages[action.payload.key]
+
+            return {
+                ...state,
+                loginUser: action.payload.updatedUser,
+                allMessages: tempMessages
+            }
+
         case "MESSAGES":
             const M_key = action.payload.key
             const M_message = action.payload.msg

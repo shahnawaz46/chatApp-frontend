@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import './MessageSection.css'
 import Message from '../messages/Message'
 import Avatar from '@mui/material/Avatar';
@@ -7,22 +7,23 @@ import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import SentimentSatisfiedOutlinedIcon from '@mui/icons-material/SentimentSatisfiedOutlined';
 import SendIcon from '@mui/icons-material/Send';
 import ShowProfile from '../showProfile/ShowProfile';
-import { useRef } from 'react';
 import Preview from '../preview/Preview';
 import 'emoji-mart/css/emoji-mart.css'
 import { Picker } from 'emoji-mart'
 import Layout from '../layout/Layout';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useStore } from '../../context/Context';
+import { userImages } from '../../axios/AxiosInstance';
 
 
 const MessageSection = () => {
     const { state: { loginUser, socket, allMessages } } = useStore()
     const { userName } = useParams()
-    const { state: { online, userId } } = useLocation()
+    const { state: { index, userId } } = useLocation()
     const navigate = useNavigate()
 
     const [showProfile, setShowProfile] = useState(false)
+    const [selectedUser, setSelectedUser] = useState({})
     const messageRef = useRef(null)
     const scrollBottomRef = useRef(null)
 
@@ -70,15 +71,22 @@ const MessageSection = () => {
 
     }
 
+    const openUserProfile = () => {
+        setSelectedUser(loginUser.friends[index])
+        setShowProfile(true)
+    }
+
     const goBack = () => {
-        console.log("back");
+        // console.log("back");
         navigate(-1)
         return
     }
 
+    // console.log("message section comp");
+
     useEffect(() => {
         scrollBottomRef?.current?.scrollIntoView({ behaviour: "smooth" })
-    }, [allMessages])
+    }, [allMessages, index])
 
     return (
         <>
@@ -88,11 +96,19 @@ const MessageSection = () => {
 
                         <BiArrowBack className='messagesection-go-back-arrow' onClick={goBack} />
 
-                        <Avatar src="" style={{ cursor: "pointer" }} />
-                        <div className="messagesection-user-name" onClick={() => setShowProfile(true)} >
+                        {
+                            loginUser?.friends?.length > 0 && loginUser?.friends[index].image ?
+
+                                <Avatar src={userImages(loginUser?.friends[index].image)} style={{ cursor: "pointer" }} alt="profile" />
+                                :
+                                <Avatar src="" style={{ cursor: "pointer" }} alt="profile" />
+
+                        }
+                        <div className="messagesection-user-name" onClick={openUserProfile} >
                             <h4>{userName}</h4>
                             {
-                                online ?
+                                loginUser?.friends?.length > 0 &&
+                                    loginUser?.friends[index]?.online ?
                                     <p>Online</p>
                                     :
                                     <p>Offline</p>
@@ -149,7 +165,7 @@ const MessageSection = () => {
                 showProfile &&
                 <div className='showprofile-main-div'>
                     <div className="showprofile-div condition">
-                        <ShowProfile setShowProfile={setShowProfile} />
+                        <ShowProfile setShowProfile={setShowProfile} info={selectedUser} />
                     </div>
                 </div>
             }
@@ -157,4 +173,4 @@ const MessageSection = () => {
     );
 };
 
-export default MessageSection;
+export default React.memo(MessageSection);

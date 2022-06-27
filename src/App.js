@@ -10,9 +10,8 @@ import { useStore } from './context/Context';
 
 
 import io from 'socket.io-client'
-import { keyframes } from '@emotion/react';
-// const url = 'https://chatapp-server-nodejs.herokuapp.com'
-const url = 'http://localhost:9000'
+const url = 'https://chatapp-server-nodejs.herokuapp.com'
+// const url = 'http://localhost:9000'
 const socket = io(url)
 
 
@@ -41,6 +40,10 @@ function App() {
       dispatch({ type: 'UPDATE_USER', payload: updatedUser })
     })
 
+    socket.on("friend_remove", ({ updatedUser, key }) => {
+      dispatch({ type: 'FRIEND_REMOVE', payload: { updatedUser, key } })
+    })
+
     socket.on("receive_message", ({ key, msg }) => {
       dispatch({ type: 'MESSAGES', payload: { key, msg } })
     })
@@ -64,7 +67,7 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<Signup />} />
         <Route path='/otp/verification' element={<OtpVerification />} />
-        <Route path="/myaccount/user=:userName" element={<MessageSection />} />
+        <Route path="/user=:userName" element={<MessageSection />} />
       </Routes>
     </>
   );

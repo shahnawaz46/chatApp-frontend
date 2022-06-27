@@ -7,7 +7,7 @@ import ShowProfile from '../showProfile/ShowProfile';
 import { useNavigate } from 'react-router-dom';
 import { useStore } from '../../context/Context';
 import { IoClose, IoCheckmarkSharp } from 'react-icons/io5';
-import { AxiosInstance } from '../../axios/AxiosInstance';
+import { AxiosInstance, userImages } from '../../axios/AxiosInstance';
 
 const Header = () => {
     const navigate = useNavigate()
@@ -83,7 +83,7 @@ const Header = () => {
 
                     </div>
                     <div className="my-name" onClick={() => setShowProfile(true)}>
-                        <Avatar src="" alt="" />
+                        <Avatar src={loginUser.image && userImages(loginUser.image)} alt="profile" />
                         <h4>{loginUser?.name}</h4>
                     </div>
                     <LockOutlinedIcon style={{ cursor: "pointer" }} onClick={logout} />

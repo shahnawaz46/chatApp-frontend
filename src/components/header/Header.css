@@ -75,12 +75,14 @@
 }
 
 .header-show-notification.hide-notification {
-    opacity: 0;
+    /* opacity: 0; */
+    display: none;
 }
 
-.header-show-notification.show-notification {
-    opacity: 1;
-}
+/* .header-show-notification.show-notification { */
+/* opacity: 1; */
+/* display: flex; */
+/* } */
 
 .header-accept-reject-div {
     display: flex;
