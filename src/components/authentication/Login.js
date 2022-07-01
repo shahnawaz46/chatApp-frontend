@@ -7,7 +7,6 @@ import { useStore } from '../../context/Context';
 
 const Login = () => {
     const navigate = useNavigate()
-    const { state: { socket } } = useStore()
 
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()

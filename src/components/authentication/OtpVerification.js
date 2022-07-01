@@ -6,7 +6,6 @@ import { AxiosInstance } from '../../axios/AxiosInstance';
 import { useStore } from '../../context/Context';
 
 const OtpVerification = () => {
-    const { state: { socket } } = useStore()
     const { state } = useLocation()
     const navigate = useNavigate()
 

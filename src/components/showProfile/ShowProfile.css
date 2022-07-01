@@ -6,6 +6,12 @@
     box-sizing: border-box;
 }
 
+.showprofile-icons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
 .showprofile-image-div {
     height: 30%;
     display: flex;

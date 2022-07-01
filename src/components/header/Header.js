@@ -34,7 +34,6 @@ const Header = () => {
     }
 
     const logout = async () => {
-        // await AxiosInstance.post('/api/user/logout', { _id: loginUser._id })
         socket.emit("offline_user", (loginUser._id))
 
         sessionStorage.removeItem("chat_user")

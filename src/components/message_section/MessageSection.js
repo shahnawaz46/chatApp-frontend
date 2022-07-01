@@ -17,7 +17,7 @@ import { userImages } from '../../axios/AxiosInstance';
 
 
 const MessageSection = () => {
-    const { state: { loginUser, socket, allMessages } } = useStore()
+    const { state: { loginUser, socket, allMessages }, dispatch } = useStore()
     const { userName } = useParams()
     const { state: { index, userId } } = useLocation()
     const navigate = useNavigate()
@@ -32,18 +32,20 @@ const MessageSection = () => {
 
     const [showEmoji, setShowEmoji] = useState(false)
 
-
     const sendMessage = () => {
 
         if (messageRef.current.value === "")
             return
 
         const messageDetail = {
-            from: loginUser._id,
-            to: userId,
+            senderId: loginUser._id,
+            receiverId: userId,
             message: messageRef.current.value,
-            time: Date.now()
+            time: Date.now(),
+            readBy: { sender: true, receiver: false }
         }
+
+        dispatch({ type: 'MESSAGES', payload: { key: [loginUser._id, userId].sort().join('-'), messageDetail } })
 
         socket.emit("send_message", messageDetail)
 
@@ -77,12 +79,10 @@ const MessageSection = () => {
     }
 
     const goBack = () => {
-        // console.log("back");
         navigate(-1)
-        return
     }
 
-    // console.log("message section comp");
+    // console.log(allMessages);
 
     useEffect(() => {
         scrollBottomRef?.current?.scrollIntoView({ behaviour: "smooth" })
@@ -125,7 +125,7 @@ const MessageSection = () => {
                             Object.keys(allMessages).length > 0 &&
                             allMessages[[loginUser._id, userId].sort().join('-')] &&
                             allMessages[[loginUser._id, userId].sort().join('-')].map((msg, index) =>
-                                <Message key={index} owner={msg.from === loginUser._id && "owner"} message={msg.message} time={msg.time} />
+                                <Message key={index} owner={msg.senderId === loginUser._id && "owner"} message={msg.message} time={msg.time} />
                             )
                         }
 

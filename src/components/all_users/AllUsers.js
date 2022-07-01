@@ -10,20 +10,33 @@ import { AxiosInstance, userImages } from '../../axios/AxiosInstance'
 
 const AllUsers = ({ userName }) => {
     const navigate = useNavigate()
-    const { state: { loginUser, socket } } = useStore()
+    const { state: { loginUser, socket, allMessages } } = useStore()
 
     const [friends, setFriends] = useState(loginUser.friends)
     const chatRef = useRef(false)
+    const unseenMsgRef = useRef({})
 
     // console.log("allUser Comp", friends);
 
     const openChat = (userId, userName, index) => {
+        if (userId in unseenMsgRef.current) {
+            const key = makingKeys(userId)
+
+            socket.emit("messages_seen", { key })
+
+            if (key in allMessages)
+                allMessages[key] = allMessages[key].map((msg) => msg.readBy.receiver ? msg : { ...msg, readBy: { ...msg.readBy, receiver: true } })
+
+            delete unseenMsgRef.current[userId]
+
+        }
+
         if (chatRef.current === false) {
             chatRef.current = true
-            navigate(`/user=${userName}`, { state: { index, userId } })
+            navigate(`/user=${userName}?${userId}`, { state: { index, userId } })
         }
         else
-            navigate(`/user=${userName}`, { replace: true, state: { index, userId } })
+            navigate(`/user=${userName}?${userId}`, { replace: true, state: { index, userId } })
 
 
         return null
@@ -77,6 +90,20 @@ const AllUsers = ({ userName }) => {
         setFriends(tempFriends)
     }
 
+    const makingKeys = (friend_id) => {
+        return [loginUser._id, friend_id].sort().join('-')
+    }
+
+    const getUnseenMessageLength = (friend_id) => {
+        const id = window.location.search ? window.location.search.slice(1) : ''
+        if (id && id === friend_id) return
+
+        const msgLength = allMessages[makingKeys(friend_id)] && allMessages[makingKeys(friend_id)].filter((msg) => msg.receiverId === loginUser._id && msg.readBy.receiver === false) || []
+        msgLength.length > 0 && (unseenMsgRef.current[friend_id] = msgLength)
+
+        return msgLength.length > 0 && <span className='user-unseen-message'>{msgLength.length}</span>
+    }
+
     useEffect(() => {
         loginUser?.friends && setFriends(loginUser.friends)
     }, [loginUser])
@@ -120,7 +147,7 @@ const AllUsers = ({ userName }) => {
                                                             </div>
                                                     }
                                                 </div>
-                                                {/* <span className='user-unseen-message'>5</span> */}
+                                                <div>{getUnseenMessageLength(item._id)}</div>
                                             </div>
                                             :
                                             <div className="user-name">

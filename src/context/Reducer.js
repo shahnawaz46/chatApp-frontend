@@ -32,7 +32,7 @@ export const reducer = (state, action) => {
 
         case "MESSAGES":
             const M_key = action.payload.key
-            const M_message = action.payload.msg
+            const M_message = action.payload.messageDetail
 
             if (M_key in state.allMessages)
                 return { ...state, allMessages: { ...state.allMessages, [M_key]: [...state.allMessages[M_key], M_message] } }

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation, useParams } from 'react-router-dom';
 import Login from './components/authentication/Login';
 import Signup from './components/authentication/Signup';
 import OtpVerification from './components/authentication/OtpVerification';
@@ -44,8 +44,15 @@ function App() {
       dispatch({ type: 'FRIEND_REMOVE', payload: { updatedUser, key } })
     })
 
-    socket.on("receive_message", ({ key, msg }) => {
-      dispatch({ type: 'MESSAGES', payload: { key, msg } })
+    socket.on("receive_message", ({ key, messageDetail }) => {
+
+      const id = window.location.search ? window.location.search.slice(1) : ''
+      if (id && id === messageDetail.senderId) {
+        messageDetail.readBy.receiver = true
+      }
+      dispatch({ type: 'MESSAGES', payload: { key, messageDetail } })
+
+      socket.emit("store_message", messageDetail)
     })
 
     socket.on("retrieve_message_client", (messagesObj) => {
