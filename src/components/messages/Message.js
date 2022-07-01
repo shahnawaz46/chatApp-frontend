@@ -1,8 +1,9 @@
 import React from 'react';
 import './Message.css';
 import { format } from 'timeago.js'
+import { BsCheck, BsCheckAll } from 'react-icons/bs';
 
-const Message = ({ owner, message, time, media }) => {
+const Message = ({ owner, message, time, media, readBy }) => {
     // console.log("media", media);
     return (
         <div className={`message-body ${owner}`}>
@@ -16,7 +17,10 @@ const Message = ({ owner, message, time, media }) => {
                     {message}
                 </p>
             }
-            <span className='message-time'>{format(time)}</span>
+            <div className='message-time-tick'>
+                <div className='message-time'>{format(time)}</div>
+                <div className={`tick ${owner}`}>{readBy ? <BsCheckAll /> : <BsCheck />}</div>
+            </div>
         </div>
     );
 };

@@ -41,6 +41,12 @@ export const reducer = (state, action) => {
                 return { ...state, allMessages: { ...state.allMessages, [M_key]: [M_message] } }
 
 
+        case "UPDATE_MESSAGE":
+            return {
+                ...state,
+                allMessages: { ...state.allMessages, [action.payload.key]: action.payload.messages }
+            }
+
         case "FETCH_MESSAGE":
             return {
                 ...state,

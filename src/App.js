@@ -44,15 +44,22 @@ function App() {
       dispatch({ type: 'FRIEND_REMOVE', payload: { updatedUser, key } })
     })
 
-    socket.on("receive_message", ({ key, messageDetail }) => {
+    socket.on("receive_message", (messageDetail) => {
 
       const id = window.location.search ? window.location.search.slice(1) : ''
       if (id && id === messageDetail.senderId) {
         messageDetail.readBy.receiver = true
       }
-      dispatch({ type: 'MESSAGES', payload: { key, messageDetail } })
 
       socket.emit("store_message", messageDetail)
+    })
+
+    socket.on("store_message_in_client", ({ key, messageDetail }) => {
+      dispatch({ type: 'MESSAGES', payload: { key, messageDetail } })
+    })
+
+    socket.on("message_seen_client", ({ key, messages }) => {
+      dispatch({ type: 'UPDATE_MESSAGE', payload: { key, messages } })
     })
 
     socket.on("retrieve_message_client", (messagesObj) => {

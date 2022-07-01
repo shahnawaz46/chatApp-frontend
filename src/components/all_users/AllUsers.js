@@ -22,10 +22,10 @@ const AllUsers = ({ userName }) => {
         if (userId in unseenMsgRef.current) {
             const key = makingKeys(userId)
 
-            socket.emit("messages_seen", { key })
-
             if (key in allMessages)
                 allMessages[key] = allMessages[key].map((msg) => msg.readBy.receiver ? msg : { ...msg, readBy: { ...msg.readBy, receiver: true } })
+
+            socket.emit("messages_seen", { key, messages: allMessages[key] })
 
             delete unseenMsgRef.current[userId]
 
@@ -99,7 +99,7 @@ const AllUsers = ({ userName }) => {
         if (id && id === friend_id) return
 
         const msgLength = allMessages[makingKeys(friend_id)] && allMessages[makingKeys(friend_id)].filter((msg) => msg.receiverId === loginUser._id && msg.readBy.receiver === false) || []
-        msgLength.length > 0 && (unseenMsgRef.current[friend_id] = msgLength)
+        msgLength.length > 0 && (unseenMsgRef.current[friend_id] = msgLength.length)
 
         return msgLength.length > 0 && <span className='user-unseen-message'>{msgLength.length}</span>
     }

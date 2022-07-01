@@ -45,8 +45,6 @@ const MessageSection = () => {
             readBy: { sender: true, receiver: false }
         }
 
-        dispatch({ type: 'MESSAGES', payload: { key: [loginUser._id, userId].sort().join('-'), messageDetail } })
-
         socket.emit("send_message", messageDetail)
 
         messageRef.current.value = null
@@ -125,7 +123,7 @@ const MessageSection = () => {
                             Object.keys(allMessages).length > 0 &&
                             allMessages[[loginUser._id, userId].sort().join('-')] &&
                             allMessages[[loginUser._id, userId].sort().join('-')].map((msg, index) =>
-                                <Message key={index} owner={msg.senderId === loginUser._id && "owner"} message={msg.message} time={msg.time} />
+                                <Message key={index} owner={msg.senderId === loginUser._id && "owner"} message={msg.message} time={msg.time} readBy={msg.readBy.receiver} />
                             )
                         }
 
