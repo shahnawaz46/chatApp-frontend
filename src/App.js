@@ -48,7 +48,7 @@ function App() {
 
       const id = window.location.search ? window.location.search.slice(1) : ''
       if (id && id === messageDetail.senderId) {
-        messageDetail.readBy.receiver = true
+        messageDetail.receiverSeen = true
       }
 
       socket.emit("store_message", messageDetail)

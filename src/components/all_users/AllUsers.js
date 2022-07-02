@@ -23,8 +23,9 @@ const AllUsers = ({ userName }) => {
             const key = makingKeys(userId)
 
             if (key in allMessages)
-                allMessages[key] = allMessages[key].map((msg) => msg.readBy.receiver ? msg : { ...msg, readBy: { ...msg.readBy, receiver: true } })
+                allMessages[key] = allMessages[key].map((msg) => msg.receiverSeen ? msg : { ...msg, receiverSeen: true })
 
+            // console.log('unseen message');
             socket.emit("messages_seen", { key, messages: allMessages[key] })
 
             delete unseenMsgRef.current[userId]
@@ -98,7 +99,7 @@ const AllUsers = ({ userName }) => {
         const id = window.location.search ? window.location.search.slice(1) : ''
         if (id && id === friend_id) return
 
-        const msgLength = allMessages[makingKeys(friend_id)] && allMessages[makingKeys(friend_id)].filter((msg) => msg.receiverId === loginUser._id && msg.readBy.receiver === false) || []
+        const msgLength = allMessages[makingKeys(friend_id)] && allMessages[makingKeys(friend_id)].filter((msg) => msg.receiverId === loginUser._id && msg.receiverSeen === false) || []
         msgLength.length > 0 && (unseenMsgRef.current[friend_id] = msgLength.length)
 
         return msgLength.length > 0 && <span className='user-unseen-message'>{msgLength.length}</span>

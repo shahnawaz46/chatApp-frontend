@@ -42,7 +42,7 @@ const MessageSection = () => {
             receiverId: userId,
             message: messageRef.current.value,
             time: Date.now(),
-            readBy: { sender: true, receiver: false }
+            receiverSeen: false
         }
 
         socket.emit("send_message", messageDetail)
@@ -123,7 +123,7 @@ const MessageSection = () => {
                             Object.keys(allMessages).length > 0 &&
                             allMessages[[loginUser._id, userId].sort().join('-')] &&
                             allMessages[[loginUser._id, userId].sort().join('-')].map((msg, index) =>
-                                <Message key={index} owner={msg.senderId === loginUser._id && "owner"} message={msg.message} time={msg.time} readBy={msg.readBy.receiver} />
+                                <Message key={index} owner={msg.senderId === loginUser._id && "owner"} message={msg.message} time={msg.time} readBy={msg.receiverSeen} />
                             )
                         }
 
