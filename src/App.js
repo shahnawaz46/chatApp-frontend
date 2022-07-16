@@ -44,6 +44,10 @@ function App() {
       dispatch({ type: 'FRIEND_REMOVE', payload: { updatedUser, key } })
     })
 
+    socket.on("when_receiver_offline", ({ key, messageDetail }) => {
+      dispatch({ type: 'MESSAGES', payload: { key, messageDetail } })
+    })
+
     socket.on("receive_message", (messageDetail) => {
 
       const id = window.location.search ? window.location.search.slice(1) : ''
@@ -51,6 +55,7 @@ function App() {
         messageDetail.receiverSeen = true
       }
 
+      console.log("store message");
       socket.emit("store_message", messageDetail)
     })
 
