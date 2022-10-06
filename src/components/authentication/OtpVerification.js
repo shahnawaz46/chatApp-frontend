@@ -28,7 +28,7 @@ const OtpVerification = () => {
           userInfo
         );
 
-        sessionStorage.setItem("chat_user", res.data.userId);
+        localStorage.setItem("chat_user", res.data.userId);
 
         navigate("/", { replace: true });
       } catch (err) {
@@ -49,7 +49,7 @@ const OtpVerification = () => {
     }
   };
 
-  if (sessionStorage.getItem("chat_user")) return <Navigate to={"/"} replace />;
+  if (localStorage.getItem("chat_user")) return <Navigate to={"/"} replace />;
 
   return (
     <>

@@ -7,6 +7,7 @@ import { useStore } from '../../context/Context';
 
 const Login = () => {
     const navigate = useNavigate()
+    const {state:{socket}} = useStore()
 
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
@@ -18,7 +19,8 @@ const Login = () => {
         try {
             const res = await AxiosInstance.post('/api/user/signin', { email, password })
 
-            sessionStorage.setItem("chat_user", res.data.userId)
+            // socket.emit("online_user", res.data.userId)
+            localStorage.setItem("chat_user", res.data.userId)
 
             navigate("/", { replace: true })
 
@@ -28,12 +30,12 @@ const Login = () => {
         }
     }
 
-    if (sessionStorage.getItem("chat_user"))
+    if (localStorage.getItem("chat_user"))
         return <Navigate to={"/"} replace />
 
     return (
         <>
-            <Form button={"sing up"} parag={'signup'} link={'/signup'}>
+            <Form button={"sign up"} parag={'signup'} link={'/signup'}>
                 <form className='signup-login-form' onSubmit={loginHandle}>
                     <h1>Login Account</h1>
                     <input type="email" placeholder='Email' onChange={(e) => setEmail(e.target.value)} required />

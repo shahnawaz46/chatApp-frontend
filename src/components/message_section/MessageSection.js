@@ -48,6 +48,7 @@ const MessageSection = () => {
         socket.emit("send_message", messageDetail)
 
         messageRef.current.value = null
+        setShowEmoji(false)
     }
 
     const sendImage = (e) => {

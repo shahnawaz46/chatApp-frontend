@@ -12,7 +12,7 @@ const ShowProfile = ({ setShowProfile, info }) => {
     const navigate = useNavigate()
 
     const { state: { socket, loginUser }, dispatch } = useStore()
-    const checkRef = useRef(sessionStorage.getItem("chat_user"))
+    const checkRef = useRef(localStorage.getItem("chat_user"))
 
     const uploadImage = async (e) => {
         const formData = new FormData()

@@ -84,8 +84,8 @@ const AllUsers = ({ userName }) => {
         // console.log(userId);
         socket.emit("friend_request_send", request)
 
-        // const tempfriends = friends means tempFriends is pointing to the friends state
-        // const tempfriends = [...friends] means i'm copying the friends list into the tempfriends list
+        // const tempfriends = friends (means tempFriends is pointing to the friends state)
+        // const tempfriends = [...friends] (means i'm copying the friends list into the tempfriends list)
         const tempFriends = [...friends]
         tempFriends[index].requestAlreadySent = true
         setFriends(tempFriends)

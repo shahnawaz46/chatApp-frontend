@@ -31,7 +31,7 @@ const Signup = () => {
         }
     }
 
-    if (sessionStorage.getItem("chat_user"))
+    if (localStorage.getItem("chat_user"))
         return <Navigate to={"/"} replace />
 
     return (

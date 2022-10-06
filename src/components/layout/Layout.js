@@ -14,7 +14,8 @@ const Home = ({ children }) => {
     // and i will get login user data 
     useEffect(() => {
         if (socket && Object.keys(loginUser).length === 0) {
-            const userId = sessionStorage.getItem("chat_user")
+            console.log("layout online_user event");
+            const userId = localStorage.getItem("chat_user")
             socket.emit("online_user", userId)
 
             socket.emit("retrieve_message", userId)

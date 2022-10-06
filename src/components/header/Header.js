@@ -34,15 +34,14 @@ const Header = () => {
     }
 
     const logout = async () => {
-        socket.emit("offline_user", (loginUser._id))
+        socket.emit("logout_user", (loginUser._id))
 
-        sessionStorage.removeItem("chat_user")
+        localStorage.removeItem("chat_user")
 
         dispatch({ type: "USER_LOGOUT" })
 
         navigate("/login", { replace: true })
     }
-
 
     return (
         <>
