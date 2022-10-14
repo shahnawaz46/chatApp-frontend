@@ -51,7 +51,7 @@ function App() {
         messageDetail.receiverSeen = true;
       }
 
-      console.log("store message");
+      // console.log("store message");
       socket.emit("store_message", messageDetail);
     });
 

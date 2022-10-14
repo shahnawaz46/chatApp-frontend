@@ -1,35 +1,33 @@
-import React,{useState} from 'react';
+import React from 'react';
 import './Message.css';
 import { format } from 'timeago.js'
 import { BsCheck, BsCheckAll } from 'react-icons/bs';
-import {FiChevronDown} from 'react-icons/fi';
 
-const Message = ({ owner, message, time, media, readBy }) => {
-    // console.log("media", media);
-    const [deleteMessageMenu, setDeleteMessageMenu] = useState(false)
 
-    const deleteMessage = (e) =>{
-        console.log("click");
-    }
+const Message = (props) => {
+    const { owner, msgDetail: { messageId, mediaURL, message, time, receiverSeen, senderId, receiverId }, rightClickForShowMenu } = props
 
     return (
         <div className={`message-body ${owner}`}>
             {
-                media && <img src={media.url} alt="media" style={{ width: '120px' }} />
+                mediaURL &&
+                <a href={mediaURL} download="file" target="_blank" className='message-anchor-tag'>
+                    <img src={mediaURL} alt="media" className='message-media' />
+                </a>
             }
 
             {
                 message &&
-                <div className={`message ${owner}`} onMouseEnter={()=>setDeleteMessageMenu(true)} onMouseLeave={()=>setDeleteMessageMenu(false)}>
+                <div className={`message ${owner}`} onContextMenu={(e) => rightClickForShowMenu(e, {messageId, receiverId,senderId})}>
                     <p>{message}</p>
-                    {
-                        deleteMessageMenu && <FiChevronDown style={{marginLeft:'5px', overflow:"visible"}} onClick={deleteMessage} />
-                    }
+
+                    {/* <FiChevronDown style={{ marginLeft: '5px', overflow: "visible" }} onClick={deleteMessage} /> */}
+
                 </div>
             }
             <div className='message-time-tick'>
                 <div className='message-time'>{format(time)}</div>
-                <div className={`tick ${owner}`}>{readBy ? <BsCheckAll /> : <BsCheck />}</div>
+                <div className={`tick ${owner}`}>{receiverSeen ? <BsCheckAll /> : <BsCheck />}</div>
             </div>
         </div>
     );

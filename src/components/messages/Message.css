@@ -50,6 +50,58 @@
     display: block;
 }
 
+.message-media{
+    width: 300px;
+    cursor: pointer;
+}
+
+.right-click-modal{
+   height: 90px;
+   width: 140px;
+   background-color: white;
+   color:black;
+   padding: 17px;
+   border-radius: 5px;
+   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+   display: none;
+   flex-direction: column;
+   justify-content: center;
+   gap: 10px;
+}
+
+.show-delete-menu.right-click-modal{
+    display: flex;
+}
+
+.right-click-menu{
+    display: flex;
+    align-items: center;
+    justify-content: flex;
+    cursor: pointer;
+}
+
+.right-click-copy-icon{
+    font-size: 20px;
+}
+
+.right-click-delete-icon{
+    font-size: 24px;
+}
+
+.right-click-span{
+    font-size: 16px;
+    margin-left: 10px;
+}
+
+@media only screen and (max-width: 500px) {
+    .message-anchor-tag{
+        width: 70%;
+    }
+
+    .message-media{
+        width: 100%;
+    }
+}
 
 @media only screen and (max-width: 340px) {
     .message-body {
@@ -64,5 +116,9 @@
     .message-time {
         font-size: 11px;
         margin-top: 3px;
+    }
+
+    .message-anchor-tag{
+        width: 80%;
     }
 }

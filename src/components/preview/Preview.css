@@ -9,18 +9,20 @@
 .preview-image-div{
     width: 100%;
     height: 100%;
-    max-width: 80%;
-    max-height: 80%;
+    max-width: 400px;
+    max-height: 450px;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
-    background-color: black;
-    padding: 13px;
+    background-color: white;
+    padding: 15px;
     display: flex;
     flex-direction: column;
     align-items: center;
     overflow: hidden;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 .preview-image{
@@ -28,22 +30,49 @@
     width: 100%;
     height: 100%;
     object-fit: contain;
+    margin: 20px 20px;
+}
+
+.preview-buttons-div{
+    width: 100%;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    gap: 20px;
 }
 
 .preview-button{
-    width: 150px;
     padding: 6px;
     font-size: 16px;
     border: none;
     border-radius: 4px;
     margin-top: 10px;
     cursor: pointer;
+    background: none;
+    /* color: rgb(59, 141, 245);; */
 }
 
+.preview-button:hover{
+    text-decoration: underline;
+}
+
+.preview-loading{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
 
 @media only screen and (max-width:500px) {
     .preview-image-div {
+        max-width: 350px;
+    }
+}
+
+@media only screen and (max-width:360px){
+    .preview-image-div{
         max-width: 100%;
         max-height: 100%;
+        /* margin: 0px 10px; */
     }
 }

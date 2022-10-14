@@ -14,6 +14,9 @@ import Layout from '../layout/Layout';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useStore } from '../../context/Context';
 import { userImages } from '../../axios/AxiosInstance';
+import { MdContentCopy, MdDeleteOutline } from 'react-icons/md';
+import Swal from 'sweetalert2'
+import { v4 as uuid } from 'uuid'
 
 
 const MessageSection = () => {
@@ -32,16 +35,21 @@ const MessageSection = () => {
 
     const [showEmoji, setShowEmoji] = useState(false)
 
-    const sendMessage = () => {
+    const [deleteMessageMenu, setDeleteMessageMenu] = useState(false)
+    const [menuPosition, setMenuPosition] = useState({})
 
-        if (messageRef.current.value === "")
+    const sendMessage = (imageUrl) => {
+        console.log(uuid());
+        if (messageRef.current.value === "" && !imageUrl)
             return
 
         const messageDetail = {
             senderId: loginUser._id,
             receiverId: userId,
-            message: messageRef.current.value,
+            message: messageRef.current.value ? messageRef.current.value : null,
+            mediaURL: imageUrl ? imageUrl : null,
             time: Date.now(),
+            messageId: uuid(),
             receiverSeen: false
         }
 
@@ -51,25 +59,30 @@ const MessageSection = () => {
         setShowEmoji(false)
     }
 
-    const sendImage = (e) => {
-        const fileReader = new FileReader()
-        fileReader.readAsDataURL(e.target.files[0])
-        fileReader.onload = function () {
-            setShowImage({
-                imageName: e.target.files[0].name,
-                url: fileReader.result
-            })
-            setPreviewImage(true)
+    const storeImageInCloudinary = async () => {
+        const formData = new FormData()
+        formData.append("file", showImage)
+        formData.append("upload_preset", "chat-app-images")
 
-            // reset the input field, so i can trigger onChange again for same image or file
-            e.target.value = ''
-        }
-        fileReader.onerror = function (error) {
-            console.log(error);
-            // reset the input field, so i can trigger onChange again for same image or file
-            e.target.value = ''
-        }
+        const res = await fetch('https://api.cloudinary.com/v1_1/dpzikxpfn/image/upload', {
+            method: 'POST',
+            body: formData
+        })
+        const data = await res.json()
 
+        sendMessage(data.secure_url)
+
+        setPreviewImage(false)
+        setShowImage(null)
+    }
+
+    const storeImageInState = (e) => {
+        if (!(e.target.files[0]))
+            return
+
+        setShowImage(e.target.files[0])
+
+        setPreviewImage(true)
     }
 
     const openUserProfile = () => {
@@ -81,7 +94,76 @@ const MessageSection = () => {
         navigate(-1)
     }
 
-    // console.log(allMessages);
+    const rightClickForShowMenu = (e, id) => {
+        e.preventDefault()
+
+        let pagePosition = {
+            top: e.pageY,
+            left: e.pageX
+        }
+
+        setDeleteMessageMenu(!deleteMessageMenu)
+
+        if (window.innerWidth - e.pageX < 200) {
+            pagePosition.left = e.pageX - 140
+
+        } if (window.innerHeight - e.pageY < 170) {
+            pagePosition.top = e.pageY - 90
+        }
+
+        setMenuPosition({
+            id,
+            menuPosition: {
+                position: 'absolute',
+                ...pagePosition
+            }
+        })
+    }
+
+    const deleteMessage = () => {
+
+        setDeleteMessageMenu(false)
+
+        Swal.fire({
+            title: 'Do you want to delete this message?',
+            text: 'It will be deleted from both sides',
+            icon: 'warning',
+            confirmButtonText: 'Yes, delete it!',
+            confirmButtonColor: '#3085d6',
+            showCancelButton: true,
+            cancelButtonColor: '#d333',
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                socket.emit("delete_message", menuPosition.id)
+
+                Swal.fire(
+                    'Deleted!',
+                    'Your message has been deleted.',
+                    'success'
+                )
+            }
+        })
+    }
+
+    const closeDeleteMessageMenu = (e) => {
+        const menuPosX = menuPosition.menuPosition?.left
+        const menuPosY = menuPosition.menuPosition?.top
+        if (deleteMessageMenu) {
+            if ((e.pageX > menuPosX && e.pageX < menuPosX + 140) && (e.pageY > menuPosY && e.pageY < menuPosY + 90))
+                return
+
+            setDeleteMessageMenu(false)
+        }
+    }
+
+    useEffect(() => {
+        window.addEventListener("mousedown", closeDeleteMessageMenu)
+
+        return () => {
+            window.removeEventListener("mousedown", closeDeleteMessageMenu)
+        }
+    }, [deleteMessageMenu])
 
     useEffect(() => {
         scrollBottomRef?.current?.scrollIntoView({ behaviour: "smooth" })
@@ -119,21 +201,39 @@ const MessageSection = () => {
                         </div>
                     </div>
 
-                    <div className="messagesection-chat">
+                    {/* show message/media list */}
+                    <div className={`messagesection-chat ${deleteMessageMenu && 'hide-scroll'}`}>
                         {
                             Object.keys(allMessages).length > 0 &&
                             allMessages[[loginUser._id, userId].sort().join('-')] &&
                             allMessages[[loginUser._id, userId].sort().join('-')].map((msg, index) =>
-                                <Message key={index} owner={msg.senderId === loginUser._id && "owner"} message={msg.message} time={msg.time} readBy={msg.receiverSeen} />
+                                <Message
+                                    key={index}
+                                    msgDetail={msg}
+                                    owner={msg.senderId === loginUser._id && "owner"}
+                                    rightClickForShowMenu={rightClickForShowMenu}
+                                />
                             )
                         }
+
+                        {/* for show delete/copy message */}
+                        <div className={`right-click-modal ${deleteMessageMenu && 'show-delete-menu'}`} style={menuPosition.menuPosition}>
+                            <div className='right-click-menu'>
+                                <MdContentCopy className='right-click-copy-icon' />
+                                <span className='right-click-span'>Copy Text</span>
+                            </div>
+                            <div className='right-click-menu' onClick={deleteMessage}>
+                                <MdDeleteOutline className='right-click-delete-icon' />
+                                <span className='right-click-span'>Delete</span>
+                            </div>
+                        </div>
 
                         <div id="bottom-reference" ref={scrollBottomRef} />
                     </div>
 
                     <div className="messagesection-send-message">
                         <div className="messagesection-file-select">
-                            <input type="file" accept='image/*' id="input-file-hide" style={{ display: 'none' }} onChange={sendImage} />
+                            <input type="file" accept='image/*' id="input-file-hide" style={{ display: 'none' }} onChange={storeImageInState} />
                             <label htmlFor="input-file-hide">
                                 <AddOutlinedIcon className='messagesection-plus-icon' />
                             </label>
@@ -141,7 +241,7 @@ const MessageSection = () => {
 
                         <input type="text" placeholder="Type your message..." ref={messageRef} />
                         <SentimentSatisfiedOutlinedIcon style={{ cursor: 'pointer' }} onClick={() => setShowEmoji(prev => !prev)} />
-                        <SendIcon style={{ marginLeft: "10px", cursor: "pointer" }} onClick={sendMessage} />
+                        <SendIcon style={{ marginLeft: "10px", cursor: "pointer" }} onClick={() => sendMessage('')} />
                     </div>
                 </div>
             </Layout>
@@ -156,7 +256,7 @@ const MessageSection = () => {
             {/* preview image before send to the user */}
             {
                 previewImage &&
-                <Preview image={showImage} setImage={setPreviewImage} />
+                <Preview showImage={showImage} setShowImage={setShowImage} setPreviewImage={setPreviewImage} storeImageInCloudinary={storeImageInCloudinary} />
             }
 
             {/* user profile div for showing transition */}

@@ -61,6 +61,10 @@
     overflow-x: hidden;
 }
 
+.hide-scroll.messagesection-chat{
+    overflow: hidden;
+}
+
 .messagesection-send-message {
     background-color: rgb(226, 222, 222);
     width: 100%;
@@ -73,6 +77,10 @@
     border-radius: 5px;
     position: sticky;
     bottom: 0px;
+}
+
+.messagesection-plus-icon{
+    cursor: pointer;
 }
 
 .messagesection-send-message>input {
