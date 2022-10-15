@@ -5,7 +5,8 @@ import Avatar from '@mui/material/Avatar';
 import { useNavigate } from 'react-router-dom';
 import { useStore } from '../../context/Context';
 import { MdPersonAddAlt1, MdCircle, MdCheck } from 'react-icons/md'
-import { AxiosInstance, userImages } from '../../axios/AxiosInstance'
+import { AxiosInstance } from '../../axios/AxiosInstance'
+import { DebounceInput } from 'react-debounce-input'
 
 
 const AllUsers = ({ userName }) => {
@@ -57,6 +58,7 @@ const AllUsers = ({ userName }) => {
                     id: loginUser._id,
                     friends: loginUser.friends || []
                 }
+
                 const res = await AxiosInstance.post('/api/user/search', searchInfo)
 
                 allSearchUser = res.data.allSearchUser.map((item) => {
@@ -65,6 +67,7 @@ const AllUsers = ({ userName }) => {
                     } else
                         return { ...item, notFriend: true }
                 })
+
             }
 
             // console.log(allSearchUser);
@@ -113,7 +116,7 @@ const AllUsers = ({ userName }) => {
         <div className="alluser-div" id={userName ? "hide-alluser-div" : ""}>
             <h3>Chats</h3>
             <div className="alluser-search-bar">
-                <input type="text" placeholder="search for users" onChange={searchUser} />
+                <DebounceInput type="text" placeholder="search for users" minLength={2} debounceTimeout={600} onChange={searchUser} />
                 <SearchIcon className="alluser-search-icon" />
             </div>
             {/* <div className="alluser-avatars">
@@ -128,7 +131,7 @@ const AllUsers = ({ userName }) => {
                     friends.length > 0 ? friends.map((item, index) => {
                         return (
                             <div key={index} className="user-div" >
-                                <Avatar src={item.image && userImages(item.image)} />
+                                <Avatar src={item.image && item.image} />
                                 <div className="user-name-message">
                                     {
                                         !(item?.notFriend) ?

@@ -81,7 +81,7 @@ const Header = () => {
 
                     </div>
                     <div className="my-name" onClick={() => setShowProfile(true)}>
-                        <Avatar src={loginUser.image && userImages(loginUser.image)} alt="profile" />
+                        <Avatar src={loginUser.image && loginUser.image} alt="profile" />
                         <h4>{loginUser?.name}</h4>
                     </div>
                     <LockOutlinedIcon style={{ cursor: "pointer" }} onClick={logout} />

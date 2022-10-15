@@ -39,7 +39,6 @@ const MessageSection = () => {
     const [menuPosition, setMenuPosition] = useState({})
 
     const sendMessage = (imageUrl) => {
-        console.log(uuid());
         if (messageRef.current.value === "" && !imageUrl)
             return
 
@@ -180,7 +179,7 @@ const MessageSection = () => {
                         {
                             loginUser?.friends?.length > 0 && loginUser?.friends[index].image ?
 
-                                <Avatar src={userImages(loginUser?.friends[index].image)} style={{ cursor: "pointer" }} alt="profile" />
+                                <Avatar src={loginUser?.friends[index].image} style={{ cursor: "pointer" }} alt="profile" />
                                 :
                                 <Avatar src="" style={{ cursor: "pointer" }} alt="profile" />
 

@@ -21,10 +21,10 @@ const Preview = ({ showImage, setShowImage, setPreviewImage, storeImageInCloudin
                 {
                     previewLoading &&
                     <div className='preview-loading' id='preview-loader'>
-                        <img src={PreviewLoading} alt="preview-loading" style={{width:'80px'}} />
+                        <img src={PreviewLoading} alt="preview-loading" style={{ width: '80px' }} />
                     </div>
                 }
-                <img src={URL.createObjectURL(showImage)} alt="" className='preview-image' />
+                <img src={URL.createObjectURL(showImage)} alt="preview" className='preview-image' />
                 <div className='preview-buttons-div'>
                     <button onClick={cancelButtonPres} className='preview-button'>Cancel</button>
                     <button onClick={storeImage} className='preview-button'>Send</button>

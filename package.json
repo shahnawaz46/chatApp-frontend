@@ -15,6 +15,7 @@
     "cloudinary-react": "^1.8.1",
     "emoji-mart": "^3.0.1",
     "react": "^17.0.2",
+    "react-debounce-input": "^3.3.0",
     "react-dom": "^17.0.2",
     "react-icons": "^4.3.1",
     "react-router-dom": "^6.2.1",

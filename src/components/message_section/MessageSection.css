@@ -61,12 +61,12 @@
     overflow-x: hidden;
 }
 
-.hide-scroll.messagesection-chat{
+.hide-scroll.messagesection-chat {
     overflow: hidden;
 }
 
 .messagesection-send-message {
-    background-color: rgb(226, 222, 222);
+    background-color: rgb(227, 227, 227);
     width: 100%;
     display: flex;
     align-items: center;
@@ -79,7 +79,7 @@
     bottom: 0px;
 }
 
-.messagesection-plus-icon{
+.messagesection-plus-icon {
     cursor: pointer;
 }
 

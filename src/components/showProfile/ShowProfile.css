@@ -36,7 +36,20 @@
     font-weight: 500;
 }
 
-.showprofile-detail>p {
+.showprofile-status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 17px;
+    padding-top: 10px;
+}
+
+.edit-icon {
+    margin-left: 20px;
+    overflow: visible;
+}
+
+.showprofile-number>p {
     margin-top: 10px;
 }
 
