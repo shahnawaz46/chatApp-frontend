@@ -7,7 +7,7 @@ import ShowProfile from '../showProfile/ShowProfile';
 import { useNavigate } from 'react-router-dom';
 import { useStore } from '../../context/Context';
 import { IoClose, IoCheckmarkSharp } from 'react-icons/io5';
-import { AxiosInstance, userImages } from '../../axios/AxiosInstance';
+import { BiCheck } from 'react-icons/bi'
 
 const Header = () => {
     const navigate = useNavigate()
@@ -43,6 +43,17 @@ const Header = () => {
         navigate("/login", { replace: true })
     }
 
+
+    const shareLink = () => {
+        navigator.clipboard.writeText(window.location.origin)
+
+        document.getElementById("message-copied-header").style.display = "flex"
+
+        setTimeout(() => {
+            document.getElementById("message-copied-header").style.display = "none"
+        }, 1000)
+    }
+
     return (
         <>
             <div className="header-div">
@@ -51,7 +62,13 @@ const Header = () => {
                     <p><span style={{ fontWeight: '700' }}>Global</span> Talk</p>
                 </div>
                 <div className="app-navbar">
-                    <button onClick={() => alert("this function is not available right now")}>Invite Friends</button>
+                    <button onClick={shareLink} className='invite-btn'>Invite Friends</button>
+
+                    <div id='message-copied-header' className='message-copied' style={{ position: "fixed", left: '50%', transfrom: 'translateX(-50%)' }}>
+                        <BiCheck style={{ marginRight: '2px', fontSize: '20px' }} />
+                        <span>Copied</span>
+                    </div>
+
                     <div className='header-notification-div'>
                         {
                             loginUser?.notifications?.length > 0 &&

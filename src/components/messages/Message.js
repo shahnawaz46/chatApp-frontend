@@ -12,13 +12,13 @@ const Message = (props) => {
             {
                 mediaURL &&
                 <a href={mediaURL} download="file" target="_blank" className='message-anchor-tag'>
-                    <img src={mediaURL} alt="media" className='message-media' onContextMenu={(e) => rightClickForShowMenu(e, { messageId, receiverId, senderId })} />
+                    <img src={mediaURL} alt="media" className='message-media' onContextMenu={(e) => rightClickForShowMenu(e, { messageId, mediaURL, receiverId, senderId })} />
                 </a>
             }
 
             {
                 message &&
-                <div className={`message ${owner}`} onContextMenu={(e) => rightClickForShowMenu(e, { messageId, receiverId, senderId })}>
+                <div className={`message ${owner}`} onContextMenu={(e) => rightClickForShowMenu(e, { messageId, message, receiverId, senderId })}>
                     <p>{message}</p>
 
                     {/* <FiChevronDown style={{ marginLeft: '5px', overflow: "visible" }} onClick={deleteMessage} /> */}

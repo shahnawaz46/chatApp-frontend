@@ -52,7 +52,7 @@
     /* border: 1px solid black; */
     width: 100%;
     /* height: 410px; */
-    height: calc(100vh - 260px);
+    height: calc(100vh - 255px);
     display: flex;
     flex-direction: column;
     margin: 5px 0px;

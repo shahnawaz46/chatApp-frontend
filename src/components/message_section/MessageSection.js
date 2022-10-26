@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import './MessageSection.css'
 import Message from '../messages/Message'
 import Avatar from '@mui/material/Avatar';
-import { BiMicrophone, BiCamera, BiArrowBack } from 'react-icons/bi';
+import { BiMicrophone, BiCamera, BiArrowBack, BiCheck } from 'react-icons/bi';
 import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import SentimentSatisfiedOutlinedIcon from '@mui/icons-material/SentimentSatisfiedOutlined';
 import SendIcon from '@mui/icons-material/Send';
@@ -13,7 +13,6 @@ import { Picker } from 'emoji-mart'
 import Layout from '../layout/Layout';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useStore } from '../../context/Context';
-import { userImages } from '../../axios/AxiosInstance';
 import { MdContentCopy, MdDeleteOutline } from 'react-icons/md';
 import Swal from 'sweetalert2'
 import { v4 as uuid } from 'uuid'
@@ -29,6 +28,7 @@ const MessageSection = () => {
     const [selectedUser, setSelectedUser] = useState({})
     const messageRef = useRef(null)
     const scrollBottomRef = useRef(null)
+    const timeRef = useRef(null)
 
     const [previewImage, setPreviewImage] = useState(false)
     const [showImage, setShowImage] = useState(null)
@@ -63,7 +63,7 @@ const MessageSection = () => {
         formData.append("file", showImage)
         formData.append("upload_preset", "chat-app-images")
 
-        const res = await fetch('https://api.cloudinary.com/v1_1/dpzikxpfn/image/upload', {
+        const res = await fetch(`https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUD_NAME}/image/upload`, {
             method: 'POST',
             body: formData
         })
@@ -145,6 +145,27 @@ const MessageSection = () => {
         })
     }
 
+    const copyMessage = () => {
+        setDeleteMessageMenu(false)
+        console.log(menuPosition);
+
+        if (menuPosition.id.message)
+            navigator.clipboard.writeText(menuPosition.id.message)
+
+        else if (menuPosition.id.mediaURL)
+            navigator.clipboard.writeText(menuPosition.id.mediaURL)
+
+
+        document.getElementById("message-copied").style.display = "flex"
+
+        if (timeRef.current)
+            clearTimeout(timeRef.current)
+
+        timeRef.current = setTimeout(() => {
+            document.getElementById("message-copied").style.display = "none"
+        }, 1000)
+    }
+
     const closeDeleteMessageMenu = (e) => {
         const menuPosX = menuPosition.menuPosition?.left
         const menuPosY = menuPosition.menuPosition?.top
@@ -201,7 +222,7 @@ const MessageSection = () => {
                     </div>
 
                     {/* show message/media list */}
-                    <div className={`messagesection-chat ${deleteMessageMenu && 'hide-scroll'}`}>
+                    <div className={`messagesection-chat ${deleteMessageMenu && 'hide-scroll'}`} id='message-section'>
                         {
                             Object.keys(allMessages).length > 0 &&
                             allMessages[[loginUser._id, userId].sort().join('-')] &&
@@ -215,16 +236,26 @@ const MessageSection = () => {
                             )
                         }
 
-                        {/* for show delete/copy message */}
+                        {/* delete/copy message modal */}
                         <div className={`right-click-modal ${deleteMessageMenu && 'show-delete-menu'}`} style={menuPosition.menuPosition}>
-                            <div className='right-click-menu'>
+                            <div className='right-click-menu' onClick={copyMessage}>
                                 <MdContentCopy className='right-click-copy-icon' />
-                                <span className='right-click-span'>Copy Text</span>
+                                {
+                                    menuPosition?.id?.message ?
+                                        <span className='right-click-span'>Copy Text</span>
+                                        :
+                                        <span className='right-click-span'>Copy Link</span>
+                                }
                             </div>
                             <div className='right-click-menu' onClick={deleteMessage}>
                                 <MdDeleteOutline className='right-click-delete-icon' />
                                 <span className='right-click-span'>Delete</span>
                             </div>
+                        </div>
+
+                        <div id='message-copied' className='message-copied'>
+                            <BiCheck style={{ marginRight: '2px', fontSize: '20px' }} />
+                            <span>Copied</span>
                         </div>
 
                         <div id="bottom-reference" ref={scrollBottomRef} />

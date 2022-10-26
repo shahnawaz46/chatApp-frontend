@@ -28,7 +28,7 @@
     position: relative;
 }
 
-.app-navbar>button {
+.invite-btn {
     background-color: rgb(59, 141, 245);
     border: none;
     border-radius: 6px;
@@ -129,7 +129,7 @@
         margin-right: 10px;
     }
 
-    .app-navbar>button {
+    .invite-btn {
         display: none;
     }
 

@@ -3,6 +3,7 @@ import './ShowProfile.css';
 import Avatar from '@mui/material/Avatar';
 import CloseIcon from '@mui/icons-material/Close';
 import { AiOutlineEdit } from 'react-icons/ai';
+import { BiCheck } from 'react-icons/bi'
 import { AxiosInstance } from '../../axios/AxiosInstance';
 import { useStore } from '../../context/Context';
 import { useNavigate } from 'react-router-dom';
@@ -21,7 +22,7 @@ const ShowProfile = ({ setShowProfile, info }) => {
         formData.append('file', e.target.files[0])
         formData.append("upload_preset", "profile-images")
 
-        const res = await fetch("https://api.cloudinary.com/v1_1/dpzikxpfn/image/upload", {
+        const res = await fetch(`https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUD_NAME}/image/upload`, {
             method: "POST",
             body: formData
         })
@@ -60,6 +61,16 @@ const ShowProfile = ({ setShowProfile, info }) => {
                 dispatch({ type: 'UPDATE_USER', payload: res.data.updatedUser })
             }
         })
+    }
+
+    const shareLink = () => {
+        navigator.clipboard.writeText(window.location.origin)
+
+        document.getElementById("message-copied-show-profile").style.display = "flex"
+
+        setTimeout(() => {
+            document.getElementById("message-copied-show-profile").style.display = "none"
+        }, 1000)
     }
 
     // console.log(checkRef);
@@ -102,6 +113,17 @@ const ShowProfile = ({ setShowProfile, info }) => {
                     <span onClick={removeFriend}> Remove Friend </span>
                 </div>
             }
+
+            {
+                info?._id === loginUser._id &&
+                <button onClick={shareLink} className='invite-btn' id='invite-btn-condition'>Invite Friends</button>
+            }
+
+            <div id='message-copied-show-profile' className='message-copied' style={{ position: "fixed", left: '50%', transfrom: 'translateX(-50%)' }}>
+                <BiCheck style={{ marginRight: '2px', fontSize: '20px' }} />
+                <span>Copied</span>
+            </div>
+
         </div>
     )
 };
