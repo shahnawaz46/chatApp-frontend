@@ -9,7 +9,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import { useStore } from "./context/Context";
 
 import io from "socket.io-client";
-const url = "https://chatapp-server-nodejs.herokuapp.com";
+// const url = "https://chatapp-server-nodejs.herokuapp.com";
+const url = "https://chatapp-backend-tmqq.onrender.com";
 // const url = "http://localhost:9000";
 const socket = io(url)
 
